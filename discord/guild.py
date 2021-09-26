@@ -77,6 +77,7 @@ from .threads import Thread, ThreadMember
 from .sticker import GuildSticker
 from .file import File
 from .welcome_screen import WelcomeScreen, WelcomeScreenChannel
+from .globals import global_client
 
 
 __all__ = (
@@ -118,7 +119,7 @@ class _GuildLimit(NamedTuple):
     filesize: int
 
 
-class Guild(Hashable):
+class GuildBase(Hashable):
     """Represents a Discord guild.
 
     This is referred to as a "server" in the official Discord UI.
@@ -2979,7 +2980,7 @@ class Guild(Hashable):
         self,
         *,
         description: Optional[str] = ...,
-        welcome_channels: Optional[List[WelcomeChannel]] = ...,
+        welcome_channels: Optional[List[WelcomeScreenChannel]] = ...,
         enabled: Optional[bool] = ...,
     ) -> WelcomeScreen:
         ...
@@ -3043,3 +3044,5 @@ class Guild(Hashable):
             new = await self._state.http.edit_welcome_screen(self.id, options, reason=options.get('reason'))
             return WelcomeScreen(data=new, guild=self)
         
+class Guild(global_client.get_guild_class()):
+    pass

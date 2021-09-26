@@ -42,6 +42,7 @@ from .permissions import Permissions
 from .enums import Status, try_enum
 from .colour import Colour
 from .object import Object
+from .globals import global_client
 
 __all__ = (
     'VoiceState',
@@ -201,7 +202,7 @@ M = TypeVar('M', bound='Member')
 
 
 @flatten_user
-class Member(discord.abc.Messageable, _UserTag):
+class MemberBase(discord.abc.Messageable, _UserTag):
     """Represents a Discord member to a :class:`Guild`.
 
     This implements a lot of the functionality of :class:`User`.
@@ -906,3 +907,6 @@ class Member(discord.abc.Messageable, _UserTag):
             The role or ``None`` if not found in the member's roles.
         """
         return self.guild.get_role(role_id) if self._roles.has(role_id) else None
+
+class Member(global_client.get_member_class()):
+    pass
