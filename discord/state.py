@@ -454,6 +454,7 @@ class ConnectionState:
         return utils.find(lambda m: m.id == msg_id, reversed(self._messages)) if self._messages else None
 
     def _add_guild_from_data(self, data: GuildPayload) -> Guild:
+        from .guild import Guild
         guild = Guild(data=data, state=self)
         self._add_guild(guild)
         return guild

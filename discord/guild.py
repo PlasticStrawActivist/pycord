@@ -77,7 +77,6 @@ from .threads import Thread, ThreadMember
 from .sticker import GuildSticker
 from .file import File
 from .welcome_screen import WelcomeScreen, WelcomeScreenChannel
-from .globals import global_client
 
 
 __all__ = (
@@ -451,6 +450,7 @@ class GuildBase(Hashable):
 
         cache_joined = self._state.member_cache_flags.joined
         self_id = self._state.self_id
+        from .member import Member
         for mdata in guild.get('members', []):
             member = Member(data=mdata, guild=self, state=state)
             if cache_joined or member.id == self_id:
@@ -2980,7 +2980,7 @@ class GuildBase(Hashable):
         self,
         *,
         description: Optional[str] = ...,
-        welcome_channels: Optional[List[WelcomeScreenChannel]] = ...,
+        welcome_channels: Optional[List[WelcomeChannel]] = ...,
         enabled: Optional[bool] = ...,
     ) -> WelcomeScreen:
         ...
@@ -3044,5 +3044,8 @@ class GuildBase(Hashable):
             new = await self._state.http.edit_welcome_screen(self.id, options, reason=options.get('reason'))
             return WelcomeScreen(data=new, guild=self)
         
-class Guild(global_client.get_guild_class()):
-    pass
+Guild = GuildBase
+
+def hook_guild(cls):
+    global Guild
+    Guild = cls

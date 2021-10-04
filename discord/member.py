@@ -42,7 +42,6 @@ from .permissions import Permissions
 from .enums import Status, try_enum
 from .colour import Colour
 from .object import Object
-from .globals import global_client
 
 __all__ = (
     'VoiceState',
@@ -908,5 +907,8 @@ class MemberBase(discord.abc.Messageable, _UserTag):
         """
         return self.guild.get_role(role_id) if self._roles.has(role_id) else None
 
-class Member(global_client.get_member_class()):
-    pass
+Member = MemberBase
+
+def hook_member(cls):
+    global Member
+    Member = cls

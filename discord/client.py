@@ -61,9 +61,6 @@ from .ui.view import View
 from .stage_instance import StageInstance
 from .threads import Thread
 from .sticker import GuildSticker, StandardSticker, StickerPack, _sticker_factory
-from .globals import global_client
-from .member import MemberBase
-from .guild import GuildBase
 
 if TYPE_CHECKING:
     from .abc import SnowflakeTime, PrivateChannel, GuildChannel, Snowflake
@@ -209,9 +206,6 @@ class Client:
         loop: Optional[asyncio.AbstractEventLoop] = None,
         **options: Any,
     ):
-        global global_client
-        global_client = self
-
         # self.ws is set in the connect method
         self.ws: DiscordWebSocket = None  # type: ignore
         self.loop: asyncio.AbstractEventLoop = asyncio.get_event_loop() if loop is None else loop
@@ -1650,9 +1644,3 @@ class Client:
         .. versionadded:: 2.0
         """
         return self._connection.persistent_views
-
-    def get_member_class(self):
-        return MemberBase
-
-    def get_guild_class(self):
-        return GuildBase
